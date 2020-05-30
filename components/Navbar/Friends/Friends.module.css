@@ -1,0 +1,29 @@
+.friends {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+    "h4 h4"
+    "item item";
+
+    padding-top: 10px;
+}
+
+.friends h4 {
+    grid-area: h4;
+    color: white;
+    position: relative;
+    /* border: 3px solid white; */
+}
+
+.items {
+    grid-area: item;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: space-between;
+    /* margin: auto; */
+    flex-wrap: wrap;
+    border: 3px solid white;
+    border-radius: 10%;
+    
+}

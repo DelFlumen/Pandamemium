@@ -1,0 +1,14 @@
+.item {
+  color: rgb(31, 41, 17);
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+}
+.item img {
+  width: 120px;
+  height: 110px;
+  border-radius: 10px;
+}
+
+.like {
+  font-size: small;
+}

@@ -1,0 +1,31 @@
+.myPosts {
+    padding: 10px;
+    
+}
+
+.textareaContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.posts {
+    margin-top: 10px;
+}
+
+.knopka {
+    position: relative;
+    left: 75px;
+    align-self: flex-start;
+    order: 2;
+    color: rgba(255, 255, 255, 0.952); /* цвет текста */
+    text-decoration: none; /* убирать подчёркивание у ссылок */
+    user-select: none; /* убирать выделение текста */
+    background: rgb(74, 54, 189); /* фон кнопки */
+    padding: .7em 1.5em; /* отступ от текста */
+    outline: none; /* убирать контур в Mozilla */
+    border: none;
+    border-radius: 5px;
+  } 
+  .knopka:hover { background: rgb(67, 129, 187); cursor: pointer;} /* при наведении курсора мышки */
+  .knopka:active { background: rgb(40, 25, 97); } /* при нажатии */

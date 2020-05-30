@@ -1,0 +1,19 @@
+.header {
+  grid-area: h;
+  background-color: rgb(135,222,184);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+
+.header img {
+  width: 90px;
+  padding-left: 40px;
+}
+
+.header h1 {
+  padding-left: 50px;
+  color: rgb(31, 41, 17);
+}
