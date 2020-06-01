@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
 // import {addMessage} from './redux/state.js'
 // import {updateNewMessageText} from './redux/state.js'
@@ -13,10 +15,15 @@ import * as serviceWorker from './serviceWorker';
 
 let rerenderEntireTree = (state) => {
   ReactDOM.render(
+    <BrowserRouter>
+
     <React.StrictMode>
-      <App store={store} state={state} dispatch={store.dispatch.bind(store)}/>
-      
+      <Provider store={store}>
+      {/* <App store={store} state={state} dispatch={store.dispatch.bind(store)}/> */}
+      <App />
+      </Provider>
     </React.StrictMode>,
+    </BrowserRouter>,
     document.getElementById('root')
   );
 }
