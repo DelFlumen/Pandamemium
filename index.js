@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 // import {changeLikeCount} from './redux/state.js'
 
 
-let rerenderEntireTree = (state) => {
+// let rerenderEntireTree = (state) => {
   ReactDOM.render(
     <BrowserRouter>
 
@@ -26,13 +26,14 @@ let rerenderEntireTree = (state) => {
     </BrowserRouter>,
     document.getElementById('root')
   );
-}
+// }
 
-rerenderEntireTree(store.getState());
-store.subscribe(() => {
-  let state = store.getState();
-  rerenderEntireTree(state);
-}); 
+// rerenderEntireTree(store.getState());
+
+// store.subscribe(() => {
+//   let state = store.getState();
+//   rerenderEntireTree(state);
+// }); 
 
 
 

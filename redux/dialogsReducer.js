@@ -19,21 +19,26 @@ let initialState = {
 
 const dialogsReducer = (state = initialState, action) => { //state = state.dialogsPage
     switch (action.type) {
-        case ADD_MESSAGE:
+        case ADD_MESSAGE: {
             let newMessage = {
                 id: state.messagesData.length + 1,
                 text: state.newMessageText,
                 likeCount: 0
             };
-            state.messagesData.push(newMessage);
-            state.newMessageText = '';
-            return state;
-        case UPDATE_NEW_MESSAGE_TEXT:
-            state.newMessageText = action.newMessageElement;
-            return state;
+            let stateCopy = {...state};
+            stateCopy.messagesData = {...state.messagesData};
+            stateCopy.messagesData.push(newMessage);
+            stateCopy.newMessageText = '';
+            return stateCopy;
+          }
+        case UPDATE_NEW_MESSAGE_TEXT: {
+          let stateCopy = {...state};  
+          stateCopy.newMessageText = action.newMessageElement;
+            return stateCopy;
+        }
         default:
             return state;
-    }
+        }
 }
 
 export const addMessageActionCreator = () => ({ type: ADD_MESSAGE });
