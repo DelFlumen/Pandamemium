@@ -8,9 +8,11 @@ let initialState = {
   }
 
   const navbarReducer = (state = initialState, action) => {
-    let stateCopy = {...state};
-    stateCopy.friends = {...state.friends}
-      return stateCopy;
+    
+    return {
+      ...state,
+      friends: [...state.friends]
+    }
 
   }
 

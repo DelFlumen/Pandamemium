@@ -7,15 +7,16 @@ import MessageItem from './MessageItem/MessageItem';
 
 
 const Dialogs = (props) => {
-    let state = props.dialogsPage;
+    
+    // let state = props.dialogsPage;
 
-    let dialogsArr = state.dialogsData.map(person => {
+    let dialogsArr = props.dialogsPage.dialogsData.map(person => {
         return <DialogItem id={person.id} name={person.name} />
     }
     );
 
-    let messagesArr = state.messagesData.map(textObj => <MessageItem text={textObj.text} />);
-    let newMessageText = state.newMessageText;
+    let messagesArr = props.dialogsPage.messagesData.map(textObj => <MessageItem text={textObj.text} />);
+    let newMessageText = props.dialogsPage.newMessageText;
 
     // let newMessage = React.createRef();
     let addMessage = () => {

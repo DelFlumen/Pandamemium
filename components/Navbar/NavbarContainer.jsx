@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
 
 let mapStateToProps = (state) => {
   return {
-    friends: state.navBar.friends
+    navBar: state.navBar
   }
 }
 
