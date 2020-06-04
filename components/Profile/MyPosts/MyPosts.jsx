@@ -7,19 +7,18 @@ import Post from './Post/Post';
 
 
 const MyPosts = (props) => {
+  let state = props.profilePage;
   
-  let postsArr = props.posts.map(post => <Post message={post.text} likeCount={post.likeCount} id={post.id} likeChange={props.onLikeChange}/>);
-  let newPostElement = React.createRef();
+  let postsArr = state.postsData.map(post => <Post message={post.text} likeCount={post.likeCount} id={post.id} likeChange={props.onLikeChange}/>);
+  let newPostElement = state.newPostText;
  
   let addPost = () => {
     props.addPost();
     // props.dispatch(addPostActionCreator());
   }
 
-  let onPostChange = () => {
-    
-    
-    let text = newPostElement.current.value;
+  let onPostChange = (e) => {
+    let text = e.target.value;
     props.updateNewPostText(text);
     // let action = updateNewPostTextActionCreator(text);
     // props.dispatch(action);
@@ -30,7 +29,7 @@ const MyPosts = (props) => {
     <div className={classes.textareaContainer}>
       <div><textarea
         onChange={onPostChange}
-        ref={newPostElement} value={props.newPostText} /></div>
+        value={newPostElement} /></div>
       <button className={classes.knopka} onClick={addPost}>Add post</button>
       {/* <button>Remove</button> */}
     </div>
