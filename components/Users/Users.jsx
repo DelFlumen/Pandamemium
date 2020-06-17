@@ -5,25 +5,62 @@ import userPhoto from "../../assets/images/user2.png";
 
 
 
+
 class Users extends React.Component {
-    state = {}
-    getUsers = () => {
-
-        if (this.props.users.length === 0) {
-
-            axios.get("https://social-network.samuraijs.com/api/1.0/users").then((result) => {
+    
+    componentDidMount() {
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`).then((result) => {
                 this.props.setUsers(result.data.items);
             }).catch((err) => {
                 console.log(err);
             });
-            // props.setUsers(initialState.users);
-        }
     }
+    // getUsers = () => {
+
+    //     if (this.props.users.length === 0) {
+
+    //         axios.get("https://social-network.samuraijs.com/api/1.0/users").then((result) => {
+    //             this.props.setUsers(result.data.items);
+    //         }).catch((err) => {
+    //             console.log(err);
+    //         });
+    //         // props.setUsers(initialState.users);
+    //     }
+    // }
+    onPageChanged = (pageNumber) => {
+        this.props.setCurrentPage(pageNumber);
+        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`).then((result) => {
+                this.props.setUsers(result.data.items);
+            }).catch((err) => {
+                console.log(err);
+            });
+    }
+    
     render() {
+
+        let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
+        let pages = [];
+        for (let i=1; i <= pagesCount; i++) {
+            pages.push(i);
+        }
         return (
             <div>
+                <div className={classes.pageNumbersContainer}>
+                    {pages.map (page => {
+                        return <span className={this.props.currentPage === page && classes.selectedPage} onClick={(e) => {this.onPageChanged(page)                        
+                        }}>{page}</span>
+                    })}
+                    {/* <span>1</span>
+                    <span className={classes.selectedPage}>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span> */}
+                </div>
+                
 
-                <button onClick={this.getUsers}>Get Users</button>
+
+
+                {/* <button onClick={this.getUsers}>Get Users</button> */}
                 {
                     this.props.users.map(user => <div key={user.id}>
 
