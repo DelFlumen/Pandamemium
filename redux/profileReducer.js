@@ -1,6 +1,7 @@
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const CHANGE_LIKE_COUNT = 'CHANGE-LIKE-COUNT';
+const SET_USER_PROFILE = 'SET_USER_PROFILE';
 
 let initialState = {
     postsData: [
@@ -8,7 +9,8 @@ let initialState = {
       { id: 2, text: "It's my first site", likeCount: 20 },
 
     ],
-    newPostText: ""
+    newPostText: "",
+    profile: null
   }
 
 const profileReducer = (state = initialState, action) => { //state = state.profilePage
@@ -32,6 +34,10 @@ const profileReducer = (state = initialState, action) => { //state = state.profi
             stateCopy.newPostText = action.newText;
             return stateCopy;
         }
+        case SET_USER_PROFILE: {
+            
+            return {...state, profile: action.profile}
+        }
         case CHANGE_LIKE_COUNT: {
             let stateCopy = {...state};
             stateCopy.postsData.map(post => {
@@ -52,6 +58,7 @@ export const updateNewPostTextActionCreator = (text) => ({
   type: UPDATE_NEW_POST_TEXT, newText: text
 });
 export const addPostActionCreator = () => ({ type: ADD_POST });
+export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 
 export default profileReducer;
 
