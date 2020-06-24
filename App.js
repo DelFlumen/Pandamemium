@@ -12,13 +12,14 @@ import Settings from './components/Settings/Settings';
 import NavbarContainer from './components/Navbar/NavbarContainer';
 import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
+import HeaderContainer from './components/Header/HeaderContainer';
 
 const App = (props) => { //props = store
 
   return (
     <BrowserRouter>
       <div className='app-wrapper'>
-        <Header />
+        <HeaderContainer />
         {/* <Navbar state={props.state.navBar} /> */}
         <NavbarContainer />
         {/* <Profile /> */}

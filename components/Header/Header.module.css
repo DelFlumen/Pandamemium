@@ -17,3 +17,17 @@
   padding-left: 50px;
   color: rgb(31, 41, 17);
 }
+
+.loginBlock {
+  justify-self: right;
+  width: 50%;
+  border-color: black;
+  
+}
+
+.loginBlock a {
+  color: white;
+  float: left;
+  margin-left: 700px;
+  text-decoration: none;
+}
