@@ -1,23 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addFriendActionCreator, delFriendActionCreator, setUsersActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, toggleIsFetchingActionCreator } from '../../redux/usersReducer';
+import { addFriendActionCreator, delFriendActionCreator, setUsersActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, toggleIsFetchingActionCreator, toggleIsFollowingProgress } from '../../redux/usersReducer';
 import * as axios from 'axios';
 import userPhoto from "../../assets/images/user2.png";
 import Users from './Users.jsx';
 
 import Preloader from '../common/Preloader/Preloader';
+import { usersAPI } from '../../API/API';
 
 
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
+        
         !this.props.users && this.props.toggleIsFetching(true);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, 
-        {withCredentials: true
-        }).then((result) => {
+        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
             this.props.toggleIsFetching(false);
-            this.props.setUsers(result.data.items);
-            this.props.setTotalUsersCount(result.data.totalCount);
+            this.props.setUsers(data.items);
+            this.props.setTotalUsersCount(data.totalCount);
+            
         }).catch((err) => {
             console.log(err);
         });
@@ -37,12 +38,9 @@ class UsersAPIComponent extends React.Component {
     onPageChanged = (pageNumber) => {
         this.props.toggleIsFetching(true);
         this.props.setCurrentPage(pageNumber);
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`, 
-        {
-            withCredentials: true
-        }).then((result) => {
+        usersAPI.getUsers(pageNumber, this.props.pageSize).then((data) => {
             this.props.toggleIsFetching(false);    
-        this.props.setUsers(result.data.items);
+        this.props.setUsers(data.items);
 
         }).catch((err) => {
             console.log(err);
@@ -66,7 +64,10 @@ class UsersAPIComponent extends React.Component {
                 onPageChanged={this.onPageChanged}
                 users={this.props.users}
                 delFriend={this.props.delFriend}
-                addFriend={this.props.addFriend} />
+                addFriend={this.props.addFriend}
+                toggleIsFollowingProgress={this.props.toggleIsFollowingProgress}
+                followingInProgress={this.props.followingInProgress}
+                />
         </>
 
     }
@@ -78,7 +79,8 @@ let mapStateToProps = (state) => {
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        followingInProgress: state.usersPage.followingInProgress
     }
 
 }
@@ -121,6 +123,7 @@ export default connect(mapStateToProps,
         setUsers: setUsersActionCreator,
         setCurrentPage: setCurrentPageActionCreator,
         setTotalUsersCount: setTotalUsersCountActionCreator,
-        toggleIsFetching: toggleIsFetchingActionCreator
+        toggleIsFetching: toggleIsFetchingActionCreator,
+        toggleIsFollowingProgress: toggleIsFollowingProgress
     }
     )(UsersAPIComponent);

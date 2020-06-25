@@ -3,6 +3,7 @@ import classes from './Users.module.css';
 import { NavLink } from "react-router-dom";
 import userPhoto from "../../assets/images/user2.png";
 import * as axios from 'axios';
+import { followAPI } from '../../API/API';
 
 let Users = (props) => {
 
@@ -36,31 +37,31 @@ let Users = (props) => {
                     </div>
                     <div>
                         {user.followed ?
-                            <button
+                            <button 
+                                disabled={props.followingInProgress.some(id => id === user.id)}
                                 onClick={() => {
-                                    axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {
-                                        withCredentials: true,
-                                        headers: {"API-KEY":"6503ad9a-a837-4f6e-b6bb-c995694e446c"}
-                                    }).then((response) => {
-                                        if (response.data.resultCode === 0) {
+                                    props.toggleIsFollowingProgress(true, user.id);
+                                    
+                                    followAPI.unfollowUser(user.id)                                    
+                                    .then((data) => {
+                                        
+                                        if (data.resultCode === 0) {
                                             props.delFriend(user.id)
                                         }
-                                    })                                 
-
-
+                                        props.toggleIsFollowingProgress(false, user.id);
+                                    })                             
                                 }}
                             >Удалить из друзей</button> :
-                            <button
+                            <button 
+                                disabled={props.followingInProgress.some(id => id === user.id)}
                                 onClick={() => {
-                                    axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {}, {
-                                        withCredentials: true,
-                                        headers: {"API-KEY": "6503ad9a-a837-4f6e-b6bb-c995694e446c"}
-                                    }).then((response) => {
-                                        if (response.data.resultCode === 0) {
+                                    props.toggleIsFollowingProgress(true, user.id);
+                                    followAPI.followUser(user.id).then((data) => {
+                                        if (data.resultCode === 0) {
                                             props.addFriend(user.id)
                                         }
+                                        props.toggleIsFollowingProgress(false, user.id);
                                     })
-
                                 }}
                             >Добавить в друзья</button>}
 
