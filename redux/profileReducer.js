@@ -1,3 +1,5 @@
+import { getUserProfileAPI } from "../API/API";
+
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const CHANGE_LIKE_COUNT = 'CHANGE-LIKE-COUNT';
@@ -60,6 +62,17 @@ export const updateNewPostTextActionCreator = (text) => ({
 export const addPostActionCreator = () => ({ type: ADD_POST });
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 
+export const getProfileThunkCreator = (userId) => {
+    return (dispatch) => {
+        getUserProfileAPI.getUserProfile(userId).then((data) => {
+            dispatch(setUserProfile(data));
+            }).catch((err) => {
+            console.log(err);
+          });
+    }
+
+
+}
 export default profileReducer;
 
 

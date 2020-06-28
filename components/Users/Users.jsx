@@ -40,28 +40,28 @@ let Users = (props) => {
                             <button 
                                 disabled={props.followingInProgress.some(id => id === user.id)}
                                 onClick={() => {
-                                    props.toggleIsFollowingProgress(true, user.id);
+                                    props.unFollowThunkCreator(user.id);
                                     
-                                    followAPI.unfollowUser(user.id)                                    
-                                    .then((data) => {
+                                    // followAPI.unfollowUser(user.id)                                    
+                                    // .then((data) => {
                                         
-                                        if (data.resultCode === 0) {
-                                            props.delFriend(user.id)
-                                        }
-                                        props.toggleIsFollowingProgress(false, user.id);
-                                    })                             
+                                    //     if (data.resultCode === 0) {
+                                    //         props.delFriend(user.id)
+                                    //     }
+                                    //     props.toggleIsFollowingProgress(false, user.id);
+                                    // })                             
                                 }}
                             >Удалить из друзей</button> :
                             <button 
                                 disabled={props.followingInProgress.some(id => id === user.id)}
                                 onClick={() => {
-                                    props.toggleIsFollowingProgress(true, user.id);
-                                    followAPI.followUser(user.id).then((data) => {
-                                        if (data.resultCode === 0) {
-                                            props.addFriend(user.id)
-                                        }
-                                        props.toggleIsFollowingProgress(false, user.id);
-                                    })
+                                    props.followThunkCreator(user.id);
+                                    // followAPI.followUser(user.id).then((data) => {
+                                    //     if (data.resultCode === 0) {
+                                    //         props.addFriend(user.id)
+                                    //     }
+                                    //     props.toggleIsFollowingProgress(false, user.id);
+                                    // })
                                 }}
                             >Добавить в друзья</button>}
 

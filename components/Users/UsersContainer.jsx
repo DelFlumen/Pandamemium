@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addFriendActionCreator, delFriendActionCreator, setUsersActionCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, toggleIsFetchingActionCreator, toggleIsFollowingProgress } from '../../redux/usersReducer';
+import { unFollowThunkCreator, followThunkCreator, setCurrentPageActionCreator, setTotalUsersCountActionCreator, toggleIsFetchingActionCreator, toggleIsFollowingProgress, getUsersThunkCreator } from '../../redux/usersReducer';
 import * as axios from 'axios';
 import userPhoto from "../../assets/images/user2.png";
 import Users from './Users.jsx';
@@ -12,16 +12,17 @@ import { usersAPI } from '../../API/API';
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
+        this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize, this.props.users);
         
-        !this.props.users && this.props.toggleIsFetching(true);
-        usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
-            this.props.toggleIsFetching(false);
-            this.props.setUsers(data.items);
-            this.props.setTotalUsersCount(data.totalCount);
+        // !this.props.users && this.props.toggleIsFetching(true);
+        // usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
+        //     this.props.toggleIsFetching(false);
+        //     this.props.setUsers(data.items);
+        //     this.props.setTotalUsersCount(data.totalCount);
             
-        }).catch((err) => {
-            console.log(err);
-        });
+        // }).catch((err) => {
+        //     console.log(err);
+        // });
     }
     // getUsers = () => {
 
@@ -36,15 +37,16 @@ class UsersAPIComponent extends React.Component {
     //     }
     // }
     onPageChanged = (pageNumber) => {
-        this.props.toggleIsFetching(true);
-        this.props.setCurrentPage(pageNumber);
-        usersAPI.getUsers(pageNumber, this.props.pageSize).then((data) => {
-            this.props.toggleIsFetching(false);    
-        this.props.setUsers(data.items);
+        // this.props.toggleIsFetching(true);
+        // this.props.setCurrentPage(pageNumber);
+        // usersAPI.getUsers(pageNumber, this.props.pageSize).then((data) => {
+        //     this.props.toggleIsFetching(false);    
+        // this.props.setUsers(data.items);
 
-        }).catch((err) => {
-            console.log(err);
-        });
+        // }).catch((err) => {
+        //     console.log(err);
+        // });
+        this.props.getUsersThunkCreator(pageNumber, this.props.pageSize);
     }
 
     render() {
@@ -63,9 +65,9 @@ class UsersAPIComponent extends React.Component {
                 currentPage={this.props.currentPage}
                 onPageChanged={this.onPageChanged}
                 users={this.props.users}
-                delFriend={this.props.delFriend}
-                addFriend={this.props.addFriend}
-                toggleIsFollowingProgress={this.props.toggleIsFollowingProgress}
+                unFollowThunkCreator={this.props.unFollowThunkCreator}
+                followThunkCreator={this.props.followThunkCreator}
+                
                 followingInProgress={this.props.followingInProgress}
                 />
         </>
@@ -118,12 +120,13 @@ let mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, 
     {
-        addFriend: addFriendActionCreator,
-        delFriend: delFriendActionCreator,
-        setUsers: setUsersActionCreator,
+        unFollowThunkCreator,
+        followThunkCreator,
+        // setUsers: setUsersActionCreator,
         setCurrentPage: setCurrentPageActionCreator,
-        setTotalUsersCount: setTotalUsersCountActionCreator,
-        toggleIsFetching: toggleIsFetchingActionCreator,
-        toggleIsFollowingProgress: toggleIsFollowingProgress
+        // setTotalUsersCount: setTotalUsersCountActionCreator,
+        // toggleIsFetching: toggleIsFetchingActionCreator,
+        toggleIsFollowingProgress: toggleIsFollowingProgress,
+        getUsersThunkCreator: getUsersThunkCreator
     }
     )(UsersAPIComponent);
