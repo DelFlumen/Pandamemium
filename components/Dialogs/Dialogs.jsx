@@ -3,6 +3,7 @@ import classes from './Dialogs.module.css'
 // import { NavLink } from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem';
 import MessageItem from './MessageItem/MessageItem';
+import { Redirect } from 'react-router-dom';
 // import { addMessageActionCreator, updateNewMessageTextActionCreator } from '../../redux/dialogsReducer';
 
 
@@ -39,6 +40,7 @@ const Dialogs = (props) => {
         // props.dispatch(action);
 
     }
+    if (props.isAuth === false) return <Redirect to={"/login"}/>
 
     return (
         <div className={classes.dialogs}>
