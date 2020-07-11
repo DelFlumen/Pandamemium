@@ -3,7 +3,7 @@ import classes from './Dialogs.module.css'
 // import { NavLink } from 'react-router-dom';
 import DialogItem from './DialogItem/DialogItem';
 import MessageItem from './MessageItem/MessageItem';
-import { addMessageActionCreator, updateNewMessageTextActionCreator } from '../../redux/dialogsReducer';
+import { addMessageActionCreator} from '../../redux/dialogsReducer';
 import Dialogs from './Dialogs';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -71,12 +71,8 @@ let mapStateToProps = (state) => {
 }
 let mapDispatchToProps = (dispatch) => {
     return {
-        updateNewMessageBody: (newMessageEl) => {
-            
-            dispatch(updateNewMessageTextActionCreator(newMessageEl));
-        },
-        addMessage: () => {
-            dispatch(addMessageActionCreator());
+        addMessage: (newMessageBody) => {
+            dispatch(addMessageActionCreator(newMessageBody));
         },
 
 

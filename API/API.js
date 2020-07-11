@@ -1,6 +1,6 @@
 import * as axios from "axios";
 
-const baseUrl = 'https://social-network.samuraijs.com/api/1.0/';
+
 
 const instance = axios.create({
     withCredentials: true,
@@ -27,9 +27,9 @@ export const authAPI = {
     authMe () {
     return instance.get(`auth/me`).then(response => response.data)
 },
-    authLogin () {
-        return instance.post(`auth/${userId}`).then(response => response.data)  
-    }
+    // authLogin () {
+    //     return instance.post(`auth/${userId}`).then(response => response.data)  
+    // }
 }
 
 export const profileAPI = {
