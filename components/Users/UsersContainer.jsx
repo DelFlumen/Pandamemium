@@ -7,6 +7,7 @@ import Users from './Users.jsx';
 
 import Preloader from '../common/Preloader/Preloader';
 import { usersAPI } from '../../API/API';
+import { getUsers, getPageSize, getTotalUsersCount, getCurrentPage, getIsFetching, getFollowingInProgress } from '../../redux/usersSelectors';
 
 
 class UsersAPIComponent extends React.Component {
@@ -14,48 +15,17 @@ class UsersAPIComponent extends React.Component {
     componentDidMount() {
         this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize, this.props.users);
         
-        // !this.props.users && this.props.toggleIsFetching(true);
-        // usersAPI.getUsers(this.props.currentPage, this.props.pageSize).then((data) => {
-        //     this.props.toggleIsFetching(false);
-        //     this.props.setUsers(data.items);
-        //     this.props.setTotalUsersCount(data.totalCount);
-            
-        // }).catch((err) => {
-        //     console.log(err);
-        // });
+        
     }
-    // getUsers = () => {
-
-    //     if (this.props.users.length === 0) {
-
-    //         axios.get("https://social-network.samuraijs.com/api/1.0/users").then((result) => {
-    //             this.props.setUsers(result.data.items);
-    //         }).catch((err) => {
-    //             console.log(err);
-    //         });
-    //         // props.setUsers(initialState.users);
-    //     }
-    // }
+    
     onPageChanged = (pageNumber) => {
-        // this.props.toggleIsFetching(true);
-        // this.props.setCurrentPage(pageNumber);
-        // usersAPI.getUsers(pageNumber, this.props.pageSize).then((data) => {
-        //     this.props.toggleIsFetching(false);    
-        // this.props.setUsers(data.items);
-
-        // }).catch((err) => {
-        //     console.log(err);
-        // });
+        
         this.props.getUsersThunkCreator(pageNumber, this.props.pageSize);
     }
 
     render() {
 
-        // let pagesCount = Math.ceil(this.props.totalUsersCount / this.props.pageSize);
-        // let pages = [];
-        // for (let i=1; i <= pagesCount; i++) {
-        //     pages.push(i);
-        // }
+        
         return <>
         {this.props.isFetching ? 
         <Preloader /> : null}
@@ -75,14 +45,26 @@ class UsersAPIComponent extends React.Component {
     }
 }
 
+// let mapStateToProps = (state) => {
+//     return {
+//         users: state.usersPage.users,
+//         pageSize: state.usersPage.pageSize,
+//         totalUsersCount: state.usersPage.totalUsersCount,
+//         currentPage: state.usersPage.currentPage,
+//         isFetching: state.usersPage.isFetching,
+//         followingInProgress: state.usersPage.followingInProgress
+//     }
+
+// }
+
 let mapStateToProps = (state) => {
     return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        followingInProgress: state.usersPage.followingInProgress
+        users: getUsers(state),
+        pageSize: getPageSize(state),
+        totalUsersCount: getTotalUsersCount(state),
+        currentPage: getCurrentPage(state),
+        isFetching: getIsFetching(state),
+        followingInProgress: getFollowingInProgress(state)
     }
 
 }

@@ -8,10 +8,10 @@ const Header = (props) => {
     <div><img alt='шапка' src="https://www.nacc.com.au/wp-content/uploads/2017/04/img-logo-wwf-panda-transparent.png" /></div>
     <div><h1>Pandamemium</h1></div>
     <div className={classes.loginBlock}>
-      { props.isAuth ? props.login 
+      { props.isAuth ? <div>{props.login} – <button onClick={props.logoutThunkCreator}>Log out</button></div>
       : <NavLink to={'/login'}>Login</NavLink> }
-      
     </div>
+    
   </header>
 }
 

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import './App.css';
 import Header from './components/Header/Header';
 import Navbar from './components/Navbar/Navbar';
 import Profile from './components/Profile/Profile';
 import DialogsContainer from './components/Dialogs/DialogsContainer';
-import { Route, BrowserRouter } from 'react-router-dom';
+import { Route, BrowserRouter, withRouter } from 'react-router-dom';
 import News from './components/News/News';
 import Music from './components/Music/Music';
 import Settings from './components/Settings/Settings';
@@ -14,9 +14,20 @@ import UsersContainer from './components/Users/UsersContainer';
 import ProfileContainer from './components/Profile/ProfileContainer';
 import HeaderContainer from './components/Header/HeaderContainer';
 import Login from './components/Login/Login';
+import { connect } from 'react-redux';
+import { authMeThunkCreator, logoutThunkCreator } from "./redux/authReducer";
+import { initializeApp } from "./redux/appReducer";
+import { compose } from 'redux';
+import Preloader from './components/common/Preloader/Preloader';
 
-const App = (props) => { //props = store
-
+class App extends Component  { //props = store
+  componentDidMount() {
+    this.props.initializeApp();
+  }
+  render() {
+    if (!this.props.initialized) {
+      return <Preloader />
+    }
   return (
     <BrowserRouter>
       <div className='app-wrapper'>
@@ -42,5 +53,11 @@ const App = (props) => { //props = store
     </BrowserRouter>
   );
 }
+}
 
-export default App;
+const mapStateToProps = (state) => ({
+  initialized: state.app.initialized
+})
+
+export default compose(
+  connect(mapStateToProps, {initializeApp})) (App);
