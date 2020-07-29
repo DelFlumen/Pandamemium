@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './ProfileInfo.module.css';
 import Preloader from '../../common/Preloader/Preloader';
-import ProfileStatus from "./ProfileStatus";
+import ProfileStatusWithHooks from "./ProfileStatusWithHooks";
 
 
 
@@ -16,7 +16,7 @@ const ProfileInfo = (props) => {
       {/* <h2>ReactoCat</h2> */}
       </div>
         <img src={props.profile.photos.large} alt="ava"/>
-        <ProfileStatus status={props.status} updateStatusThunkCreator={props.updateStatusThunkCreator}/>
+        <ProfileStatusWithHooks status={props.status} updateStatusThunkCreator={props.updateStatusThunkCreator}/>
       </div>
     
   
