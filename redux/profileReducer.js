@@ -4,6 +4,7 @@ const ADD_POST = 'ADD-POST';
 const CHANGE_LIKE_COUNT = 'CHANGE-LIKE-COUNT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
+const DELETE_POST = 'DELETE_POST';
 
 let initialState = {
     postsData: [
@@ -18,7 +19,7 @@ let initialState = {
 const profileReducer = (state = initialState, action) => { //state = state.profilePage
     switch (action.type) {
         case ADD_POST: {
-            debugger
+            
             let newPost = {
                 id: state.postsData.length + 1,
                 text: action.newPostBody,
@@ -46,6 +47,10 @@ const profileReducer = (state = initialState, action) => { //state = state.profi
             
             return {...state, profile: action.profile}
         }
+
+        case DELETE_POST: {
+            return {...state, postsData: state.postsData.filter(p => p.id !== action.postId)}
+        }
         case CHANGE_LIKE_COUNT: {
             let stateCopy = {...state};
             stateCopy.postsData.map(post => {
@@ -66,6 +71,7 @@ export const changeLikeCountActionCreator = (messageId) => ({ type: CHANGE_LIKE_
 export const addPostActionCreator = (newPostBody) => ({ type: ADD_POST, newPostBody: newPostBody });
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
+export const deletePostActionCreator = (postId) => ({ type: DELETE_POST, postId});
 
 export const getProfileThunkCreator = (userId) => {
     return (dispatch) => {
