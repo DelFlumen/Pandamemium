@@ -13,14 +13,15 @@ import { getUsers, getPageSize, getTotalUsersCount, getCurrentPage, getIsFetchin
 class UsersAPIComponent extends React.Component {
 
     componentDidMount() {
-        this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize, this.props.users);
+        const {currentPage, pageSize, users} = this.props;
+        this.props.getUsersThunkCreator(currentPage, pageSize, users);
         
         
     }
     
     onPageChanged = (pageNumber) => {
-        
-        this.props.getUsersThunkCreator(pageNumber, this.props.pageSize);
+        const {pageSize} = this.props;
+        this.props.getUsersThunkCreator(pageNumber, pageSize);
     }
 
     render() {

@@ -5,7 +5,7 @@ const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
 
 
 let initialState = {
-    userId: null,
+    id: null,
     email: null,
     login: null,
     isFetching: false,
@@ -27,36 +27,33 @@ const authReducer = (state = initialState, action) => { //state = state.profileP
     }
 }
 
-export const setAuthUserData = (email, id, login, isAuth) => ({ type: SET_AUTH_USER_DATA, payload: { email, id, login, isAuth } });
+export const setAuthUserData = (id, email, login, isAuth) => ({ type: SET_AUTH_USER_DATA, payload: { id, email, login, isAuth } });
 
-export const authMeThunkCreator = () => {
-    return (dispatch) => {
-    return authAPI.authMe().then((data) => {
+export const authMeThunkCreator = () => async (dispatch) => {
+    let response = await authAPI.authMe();
 
-        if (data.resultCode === 0) {
-            let { email, id, login } = data.data;
+        if (response.resultCode === 0) {
+            let { email, id, login } = response.data;
 
             dispatch(setAuthUserData(id, email, login, true));
         }
-    }).catch((err) => {
-        console.log(err);
-    });
+    
     }
-}
 
-export const loginThunkCreator = (email, password, rememberMe) => {
-    return (dispatch) => {
-    authAPI.login(email, password, rememberMe).then((data) => {
-        if (data.resultCode === 0) {
+
+
+export const loginThunkCreator = (email, password, rememberMe) => async (dispatch) => {
+    let response = await authAPI.login(email, password, rememberMe); //response – результат промиса
+        if (response.resultCode === 0) {
             dispatch(authMeThunkCreator());
         }
         else {
-            let message = data.messages.length > 0 ? data.messages[0] : "Some error";
+            let message = response.messages.length > 0 ? response.messages[0] : "Some error";
             dispatch(stopSubmit("login", {email: message}));
         }
-    });
-}
-}
+    }
+
+
 
 export const logoutThunkCreator = () => {
     return (dispatch) => {

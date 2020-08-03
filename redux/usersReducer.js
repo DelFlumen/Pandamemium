@@ -1,4 +1,5 @@
 import { usersAPI, followAPI } from '../API/API';
+import { updateObjectInArray } from '../utils/object-helpers';
 
 const ADD_FRIEND = 'ADD_FRIEND';
 const DEL_FRIEND = 'DEL_FRIEND';
@@ -40,6 +41,7 @@ const usersReducer = (state = initialState, action) => { //state = state.profile
         case ADD_FRIEND:
             return {
                 ...state,
+                // users: updateObjectInArray(state.users, action.userId, "id", {followed: true})
                 users: state.users.map(user => {
                     if (user.id === action.userId) {
                         return { ...user, followed: true }
@@ -52,12 +54,13 @@ const usersReducer = (state = initialState, action) => { //state = state.profile
             return {
 
                 ...state,
-                users: state.users.map(user => {
-                    if (user.id === action.userId) {
-                        return { ...user, followed: false }
-                    }
-                    return user;
-                })
+                users: updateObjectInArray(state.users, action.userId, "id", {followed: false})
+                // users: state.users.map(user => {
+                //     if (user.id === action.userId) {
+                //         return { ...user, followed: false }
+                //     }
+                //     return user;
+                // })
             }
         case SET_USERS: {
             return { ...state, users: [...action.users] }
@@ -101,43 +104,56 @@ export const setTotalUsersCountActionCreator = (totalCount) => ({ type: SET_TOTA
 export const toggleIsFetchingActionCreator = (isFetching) => ({ type: TOGGLE_IS_FETCHING, isFetching });
 export const toggleIsFollowingProgress = (isFetching, userId) => ({ type: TOGGLE_IS_FOLLOWING_PROGRESS, isFetching, userId });
 
+const followUnfollow = async (dispatch, userId, apiMethod, actionCreator) => {
+    dispatch(toggleIsFollowingProgress(true, userId));
+        let response = await apiMethod(userId); 
+            if (response.resultCode === 0) {
+                dispatch(actionCreator(userId));
+            }
+            dispatch(toggleIsFollowingProgress(false, userId));
+
+}
+
 export const getUsersThunkCreator = (currentPage, pageSize, users) => {
-    return (dispatch) => {
+    return async (dispatch) => {
 
         !users && dispatch(toggleIsFetchingActionCreator(true));
         dispatch(setCurrentPageActionCreator(currentPage));
 
-        usersAPI.getUsers(currentPage, pageSize).then((data) => {
+        let data = await usersAPI.getUsers(currentPage, pageSize);
             dispatch(toggleIsFetchingActionCreator(false));
             dispatch(setUsersActionCreator(data.items));
             dispatch(setTotalUsersCountActionCreator(data.totalCount));
-        });
+        }
     }
-}
-
+ 
 export const followThunkCreator = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
 
-        dispatch(toggleIsFollowingProgress(true, userId));
-        followAPI.followUser(userId).then((data) => {
-            if (data.resultCode === 0) {
-                dispatch(addFriendActionCreator(userId))
-            }
-            dispatch(toggleIsFollowingProgress(false, userId));
-        })
+        followUnfollow(dispatch, userId, followAPI.followUser.bind(followAPI), addFriendActionCreator);
+
+        // dispatch(toggleIsFollowingProgress(true, userId));
+        // apiMethod(userId).then((data) => {
+        //     if (data.resultCode === 0) {
+        //         dispatch(actionCreator(userId))
+        //     }
+        //     dispatch(toggleIsFollowingProgress(false, userId));
+        // })
     }
 }
 
 export const unFollowThunkCreator = (userId) => {
-    return (dispatch) => {
+    return async (dispatch) => {
 
-        dispatch(toggleIsFollowingProgress(true, userId));
-        followAPI.unfollowUser(userId).then((data) => {
-            if (data.resultCode === 0) {
-                dispatch(delFriendActionCreator(userId))
-            }
-            dispatch(toggleIsFollowingProgress(false, userId));
-        })
+        followUnfollow(dispatch, userId, followAPI.unfollowUser.bind(followAPI), delFriendActionCreator);
+
+        // dispatch(toggleIsFollowingProgress(true, userId));
+        // apiMethod(userId).then((data) => {
+        //     if (data.resultCode === 0) {
+        //         dispatch(apiMethod(userId))
+        //     }
+        //     dispatch(toggleIsFollowingProgress(false, userId));
+        // });
     }
 }
 

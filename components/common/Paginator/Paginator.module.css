@@ -1,0 +1,12 @@
+.selectedPage {
+    font-weight: bold;
+}
+
+.pageNumbersContainer {
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.pageNumbersContainer span:hover {
+    cursor: pointer;
+}

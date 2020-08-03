@@ -22,9 +22,9 @@ const Login = (props) => {
     </div>
 }
 
-const LoginForm = (props) => {
+const LoginForm = ({handleSubmit, error}) => {
     return (
-        <form onSubmit={props.handleSubmit}>
+        <form onSubmit={handleSubmit}>
             <div>
                 <Field placeholder={"Email"} name={"email"} component={Input} validate={[required]}/>
             </div>
@@ -32,10 +32,10 @@ const LoginForm = (props) => {
                 <Field placeholder={"Password"} name={"password"} type={"password"} component={Input} validate={[required]}/>
             </div>
             <div>
-                <Field type={"checkbox"} name={"rememberMe"} component={Input} validate={[required]}/> remember me
+                <Field type={"checkbox"} name={"rememberMe"} component={Input}/> remember me
             </div>
-            { props.error && <div className={styles.formSummaryError}>
-                {props.error}
+            { error && <div className={styles.formSummaryError}>
+                {error}
 
             </div>}
             <div>
