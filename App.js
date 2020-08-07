@@ -30,7 +30,7 @@ class App extends Component  { //props = store
       return <Preloader />
     }
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <div className='app-wrapper'>
         <HeaderContainer />
         {/* <Navbar state={props.state.navBar} /> */}
