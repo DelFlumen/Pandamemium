@@ -1,10 +1,12 @@
 import { profileAPI } from "../API/API";
+import { stopSubmit } from "redux-form";
 
 const ADD_POST = 'ADD-POST';
 const CHANGE_LIKE_COUNT = 'CHANGE-LIKE-COUNT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const DELETE_POST = 'DELETE_POST';
+const SAVE_PHOTO_SUCCESS = 'SAVE_PHOTO_SUCCESS';
 
 let initialState = {
     postsData: [
@@ -51,6 +53,11 @@ const profileReducer = (state = initialState, action) => { //state = state.profi
         case DELETE_POST: {
             return {...state, postsData: state.postsData.filter(p => p.id !== action.postId)}
         }
+
+        case SAVE_PHOTO_SUCCESS: {
+            return {...state, profile: {...state.profile, photos: action.photos}}
+        }
+
         case CHANGE_LIKE_COUNT: {
             let stateCopy = {...state};
             stateCopy.postsData.map(post => {
@@ -72,6 +79,7 @@ export const addPostActionCreator = (newPostBody) => ({ type: ADD_POST, newPostB
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile });
 export const setStatus = (status) => ({ type: SET_STATUS, status });
 export const deletePostActionCreator = (postId) => ({ type: DELETE_POST, postId});
+export const savePhotoSuccessActionCreator = (photos) => ({ type: SAVE_PHOTO_SUCCESS, photos});
 
 export const getProfileThunkCreator = (userId) => {
     return (dispatch) => {
@@ -102,6 +110,39 @@ export const updateStatusThunkCreator = (status) => {
         });
     }
 }
+
+export const savePhoto = (file) => {  //thunk creator
+    return async (dispatch) => {
+        try {
+        let response = await profileAPI.savePhoto(file);
+            if (response.resultCode === 0) {
+            dispatch(savePhotoSuccessActionCreator(response.data.photos));
+            };
+        }
+        catch(error) {
+            alert("Error")
+
+        }
+        };
+    }
+    
+
+export const saveProfile = (profile) => {  //thunk creator
+    return async (dispatch, getState) => {
+        let id = getState().auth.id;
+        let response = await profileAPI.saveProfile(profile);
+        
+            if (response.resultCode === 0) {
+            dispatch(getProfileThunkCreator(id));
+            
+            }
+            else {
+                dispatch(stopSubmit("editProfile", {_error: response.messages[0]}));
+                return Promise.reject(response.messages[0]);
+            }
+        };
+    }    
+
 
 export default profileReducer;
 

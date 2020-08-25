@@ -9,7 +9,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 
 const Login = (props) => {
     const onSubmit = (formData) => {
-        props.loginThunkCreator(formData.email, formData.password, formData.rememberMe)
+        props.loginThunkCreator(formData.email, formData.password, formData.rememberMe, formData.captcha)
 
     }
 
@@ -18,11 +18,11 @@ const Login = (props) => {
     }
     return <div>
         <h1>Login</h1>
-        <LoginReduxForm onSubmit={onSubmit}/>
+        <LoginReduxForm onSubmit={onSubmit} captchaUrl={props.captchaUrl}/>
     </div>
 }
 
-const LoginForm = ({handleSubmit, error}) => {
+const LoginForm = ({handleSubmit, error, captchaUrl}) => {
     return (
         <form onSubmit={handleSubmit}>
             <div>
@@ -34,6 +34,10 @@ const LoginForm = ({handleSubmit, error}) => {
             <div>
                 <Field type={"checkbox"} name={"rememberMe"} component={Input}/> remember me
             </div>
+
+            {captchaUrl && <img alt="captcha" src={captchaUrl} />}
+            {captchaUrl && <Field placeholder={"Symbols from image"} name={"captcha"} component={Input} validate={[required]}/>}
+
             { error && <div className={styles.formSummaryError}>
                 {error}
 
@@ -50,7 +54,8 @@ const LoginReduxForm = reduxForm({
 })(LoginForm)
 
 const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    captchaUrl: state.auth.captchaUrl
 
 })
 

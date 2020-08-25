@@ -1,7 +1,8 @@
-import { authAPI } from "../API/API";
+import { authAPI, securityAPI } from "../API/API";
 import { stopSubmit } from "redux-form";
 
 const SET_AUTH_USER_DATA = 'SET_AUTH_USER_DATA';
+const GET_CAPTCHA_URL_SUCCESS = 'GET_CAPTCHA_URL_SUCCESS';
 
 
 let initialState = {
@@ -9,7 +10,8 @@ let initialState = {
     email: null,
     login: null,
     isFetching: false,
-    isAuth: false
+    isAuth: false,
+    captchaUrl: null
 }
 
 const authReducer = (state = initialState, action) => { //state = state.profilePage
@@ -21,13 +23,21 @@ const authReducer = (state = initialState, action) => { //state = state.profileP
                 ...action.payload,
                 
             }
+        case GET_CAPTCHA_URL_SUCCESS: 
+        debugger;
+            return {
+                ...state,
+                ...action.payload,
+                
+            }
 
         default:
             return state;
     }
 }
 
-export const setAuthUserData = (id, email, login, isAuth) => ({ type: SET_AUTH_USER_DATA, payload: { id, email, login, isAuth } });
+export const setAuthUserData = (id, email, login, isAuth) => ({ type: SET_AUTH_USER_DATA, payload: { id, email, login, isAuth } }); //action creator
+export const getCaptchaUrlSuccess = (captchaUrl) => ({ type: GET_CAPTCHA_URL_SUCCESS, payload: { captchaUrl } }); //action creator
 
 export const authMeThunkCreator = () => async (dispatch) => {
     let response = await authAPI.authMe();
@@ -42,15 +52,25 @@ export const authMeThunkCreator = () => async (dispatch) => {
 
 
 
-export const loginThunkCreator = (email, password, rememberMe) => async (dispatch) => {
-    let response = await authAPI.login(email, password, rememberMe); //response – результат промиса
+export const loginThunkCreator = (email, password, rememberMe, captcha) => async (dispatch) => {
+    let response = await authAPI.login(email, password, rememberMe, captcha); //response – результат промиса
         if (response.resultCode === 0) {
             dispatch(authMeThunkCreator());
         }
         else {
+            if (response.resultCode === 10) {
+            dispatch(getCaptchaUrlThunkCreator());    
+            }
             let message = response.messages.length > 0 ? response.messages[0] : "Some error";
             dispatch(stopSubmit("login", {email: message}));
         }
+    }
+
+export const getCaptchaUrlThunkCreator = () => async (dispatch) => {
+    let response = await securityAPI.getCaptchaUrl(); //response – результат промиса
+    const captchaUrl = response.data.url;
+    
+    dispatch(getCaptchaUrlSuccess(captchaUrl));
     }
 
 
